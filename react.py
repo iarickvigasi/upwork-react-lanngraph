@@ -28,10 +28,15 @@ tools = [TavilySearchResults(max_results=5, include_raw_content=True)]
 
 llm = ChatOpenAI(model="gpt-4o")
 
+prompt = """
+You are a helpful assistant that can search the web for information.
+"""
+
 # Create the ReAct agent with structured_output using Pydantic model's schema
 react_agent_runnable = create_react_agent(
     llm, 
     tools=tools, 
+    prompt=prompt,
     response_format=SERPResults
 )
 
