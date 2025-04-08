@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "react-lanngraph"
+version = "0.1.0"
+description = "LangGraph project using ReAct agent with Tavily search"
+authors = ["Your Name <your.email@example.com>"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.9"
+langchain = "*"
+langgraph = "*"
+langchain-openai = "*"
+langchainhub = "*"
+langchain-community = "*"
+isort = "*"
+python-dotenv = "*"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api" 
