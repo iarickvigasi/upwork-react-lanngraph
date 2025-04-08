@@ -1,0 +1,7 @@
+langchain
+langgraph
+langchain-openai
+langchainhub
+langchain-community
+isort
+python-dotenv
