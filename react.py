@@ -1,9 +1,14 @@
-from langchain.agents import create_react_agent
-from langchain_community.tools.tavily_search import TavilySearchResults
-from langchain_openai.chat_models import ChatOpenAI
+import os
 
-from pydantic import BaseModel, Field
 from typing import List
+from pydantic import BaseModel, Field
+
+from langgraph.prebuilt import create_react_agent
+from langchain_community.tools.tavily_search import TavilySearchResults
+from langchain_openai import ChatOpenAI
+
+from dotenv import load_dotenv
+load_dotenv()
 
 react_prompt = """
 Answer the following questions as best you can. You have access to the following tools:
@@ -44,4 +49,29 @@ tools = [TavilySearchResults(max_results=5)]
 
 llm = ChatOpenAI(model="gpt-4o")
 
-react_agent_runnable = create_react_agent(llm, tools, react_prompt, response_format=SERPResults)
+react_agent_runnable = create_react_agent(llm, tools=tools, prompt=react_prompt)
+
+# Example of how to run the agent
+if __name__ == "__main__":
+    # Check if API keys are set
+    if not os.getenv("OPENAI_API_KEY"):
+        print("Error: OPENAI_API_KEY not found in environment variables")
+        exit(1)
+    if not os.getenv("TAVILY_API_KEY"):
+        print("Error: TAVILY_API_KEY not found in environment variables")
+        exit(1)
+        
+    # Run the agent with a sample query
+    query = "What are the latest developments in AI?"
+    print(f"Running query: {query}")
+    result = react_agent_runnable.invoke({"input": query})
+    
+    # Print the response
+    print("\nAgent Response:")
+    print(result)
+    
+    if isinstance(result, SERPResults):
+        print("\nStructured Results:")
+        print(result.model_dump_json(indent=2))
+    else:
+        print(f"\nOutput type: {type(result)}")
